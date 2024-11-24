@@ -1,14 +1,16 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-function Post() {
-  const { id } = useParams();
+const Post = () => {
+  const { id } = useParams(); // Access the dynamic id from the URL
+  
   return (
     <div>
-      <h2>Post {id}</h2>
-      <p>This is a post with ID: {id}</p>
+      <h1>Blog Post {id}</h1>
+      {/* You can fetch the post details using this id */}
+      <p>Details for post {id} will be displayed here...</p>
     </div>
   );
-}
+};
 
 export default Post;
