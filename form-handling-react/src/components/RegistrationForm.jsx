@@ -1,19 +1,40 @@
-// src/components/RegistrationForm.jsx
 import React, { useState } from 'react';
 
 const RegistrationForm = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    if (username && email && password) {
-      // Handle the registration logic here (e.g., call an API or update state)
+
+    let formIsValid = true;
+    let newErrors = { username: '', email: '', password: '' };
+
+    // Check for empty fields
+    if (!username) {
+      newErrors.username = 'Username is required';
+      formIsValid = false;
+    }
+    if (!email) {
+      newErrors.email = 'Email is required';
+      formIsValid = false;
+    }
+    if (!password) {
+      newErrors.password = 'Password is required';
+      formIsValid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (formIsValid) {
+      // Proceed with form submission (e.g., call API to register user)
       console.log('Form submitted with:', { username, email, password });
-    } else {
-      console.log('Please fill in all fields');
     }
   };
 
@@ -24,23 +45,21 @@ const RegistrationForm = () => {
         <input
           type="text"
           id="username"
-          name="username"
-          value={username}   {/* This binds the value to the state */}
-          onChange={(e) => setUsername(e.target.value)}   {/* Updates the state */}
-          required
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
+        {errors.username && <p>{errors.username}</p>}
       </div>
-
+      
       <div>
         <label htmlFor="email">Email:</label>
         <input
           type="email"
           id="email"
-          name="email"
-          value={email}   {/* This binds the value to the state */}
-          onChange={(e) => setEmail(e.target.value)}   {/* Updates the state */}
-          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
+        {errors.email && <p>{errors.email}</p>}
       </div>
 
       <div>
@@ -48,11 +67,10 @@ const RegistrationForm = () => {
         <input
           type="password"
           id="password"
-          name="password"
-          value={password}   {/* This binds the value to the state */}
-          onChange={(e) => setPassword(e.target.value)}   {/* Updates the state */}
-          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
+        {errors.password && <p>{errors.password}</p>}
       </div>
 
       <button type="submit">Register</button>
