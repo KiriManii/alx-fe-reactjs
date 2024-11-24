@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
-import Post from './components/Post';
+import BlogPost from './components/BlogPost'; // Import BlogPost
 import NotFound from './components/NotFound';
 import Profile from './components/Profile';
 import ProfileDetails from './components/ProfileDetails';
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         {/* Dynamic Route for Blog Post */}
-        <Route path="/blog/:id" element={<Post />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
         {/* Profile and Nested Routes */}
         <Route path="/profile" element={<PrivateRoute />}>
           <Route index element={<Profile />} />
