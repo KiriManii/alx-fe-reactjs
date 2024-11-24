@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import { useRecipeStore } from './recipeStore';
 
 const RecipeList = () => {
@@ -10,7 +11,12 @@ const RecipeList = () => {
       {recipes.length > 0 ? (
         recipes.map((recipe) => (
           <div key={recipe.id}>
-            <h3>{recipe.title}</h3>
+            <h3>
+              {/* Wrap the recipe title with a Link to navigate to the recipe details */}
+              <Link to={`/recipe/${recipe.id}`}>
+                {recipe.title}
+              </Link>
+            </h3>
             <p>{recipe.description}</p>
           </div>
         ))
