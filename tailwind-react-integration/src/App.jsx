@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import UserProfile from './components/UserProfile';  // Import UserProfile component
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <div className="bg-blue-500 text-white min-h-screen flex flex-col items-center justify-center">
-      <header className="text-center">
+      <header className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to Tailwind CSS!</h1>
         <p className="text-lg mb-4">
           Edit <code className="bg-gray-800 px-2 py-1 rounded">src/App.jsx</code> and save to reload.
@@ -19,6 +20,10 @@ function App() {
           </button>
         </p>
       </header>
+      
+      {/* Display the UserProfile component */}
+      <UserProfile />  {/* This is where you added the UserProfile component */}
+      
     </div>
   );
 }
