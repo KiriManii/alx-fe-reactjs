@@ -6,20 +6,28 @@ function AddRecipeForm() {
   const [steps, setSteps] = useState('');
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Validate function to check for empty fields
+  const validate = () => {
     const validationErrors = {};
 
-    // Basic validation
     if (!title) validationErrors.title = 'Title is required';
     if (!ingredients) validationErrors.ingredients = 'Ingredients are required';
     if (!steps) validationErrors.steps = 'Steps are required';
 
+    return validationErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Get validation errors
+    const validationErrors = validate();
     setErrors(validationErrors);
 
-    // If there are no errors, proceed (you can submit form data here)
+    // If no validation errors, submit the form
     if (Object.keys(validationErrors).length === 0) {
       console.log('Form submitted');
+      // Handle form submission logic here (e.g., sending data to an API)
     }
   };
 
