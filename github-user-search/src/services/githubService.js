@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = 'https://api.github.com';
 
+// Function to fetch user data by username
 export const fetchUserData = async (username) => {
     try {
         const response = await axios.get(`${BASE_URL}/users/${username}`);
@@ -11,16 +12,26 @@ export const fetchUserData = async (username) => {
     }
 };
 
+// Function to fetch advanced user data based on additional criteria
 export const fetchAdvancedUserData = async ({ username, location, repos }) => {
     try {
         let query = [];
+        
+        // Add username to the search query if provided
         if (username) query.push(`user:${username}`);
+        
+        // Add location to the search query if provided
         if (location) query.push(`location:${location}`);
-        if (repos) query.push(`repos:>${repos}`);
+        
+        // Add repositories count filter (minRepos) if provided
+        if (repos) query.push(`repos:>=${repos}`);  // Corrected query for minRepos
+        
         const searchQuery = query.join(' ');
 
+        // Use the GitHub search API with the query
         const response = await axios.get(`${BASE_URL}/search/users?q=${encodeURIComponent(searchQuery)}`);
-        return response.data;
+        
+        return response.data;  // Return the search results
     } catch (error) {
         throw new Error('Error fetching advanced search results');
     }
