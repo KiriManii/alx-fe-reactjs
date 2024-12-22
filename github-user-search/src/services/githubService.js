@@ -28,8 +28,8 @@ export const fetchAdvancedUserData = async ({ username, location, repos }) => {
         
         const searchQuery = query.join(' ');
 
-        // Use the GitHub search API with the query
-        const response = await axios.get(`${BASE_URL}/search/users?q=${encodeURIComponent(searchQuery)}`);
+        // Make the search request to the GitHub API for advanced search
+        const response = await axios.get(`https://api.github.com/search/users?q=${encodeURIComponent(searchQuery)}`);
         
         return response.data;  // Return the search results
     } catch (error) {
