@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchAdvancedUserData } from '../services/githubService';
+import { fetchAdvancedUserData, fetchUserData } from '../services/githubService';  // Import fetchUserData
 
 const Search = () => {
     const [username, setUsername] = useState('');
@@ -16,9 +16,19 @@ const Search = () => {
         setResults([]);
 
         try {
-            const query = { username, location, repos };
-            const data = await fetchAdvancedUserData(query);
-            setResults(data.items); // GitHub Search API returns results in `items`
+            let data;
+
+            // If username is provided, use fetchUserData for the username search
+            if (username) {
+                data = await fetchUserData(username);
+                setResults([data]); // Since fetchUserData returns a single user, wrap in an array
+            } else {
+                // Perform advanced search if no username
+                const query = { username, location, repos };
+                data = await fetchAdvancedUserData(query);
+                setResults(data.items); // GitHub Search API returns results in `items`
+            }
+
         } catch (err) {
             setError("Error fetching data. Please try again.");
         } finally {
