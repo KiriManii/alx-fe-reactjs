@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { fetchUserData } from '../services/githubService';
+import { fetchAdvancedUserData } from '../services/githubService';
 
 const Search = () => {
     const [username, setUsername] = useState('');
-    const [userData, setUserData] = useState(null);
+    const [location, setLocation] = useState('');
+    const [repos, setRepos] = useState('');
+    const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -11,42 +13,75 @@ const Search = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
-        setUserData(null);
+        setResults([]);
 
         try {
-            const data = await fetchUserData(username);
-            setUserData(data);
+            const query = { username, location, repos };
+            const data = await fetchAdvancedUserData(query);
+            setResults(data.items); // GitHub Search API returns results in `items`
         } catch (err) {
-            setError("Looks like we cant find the user");
+            setError("Error fetching data. Please try again.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSearch}>
+        <div className="p-4">
+            <form onSubmit={handleSearch} className="space-y-4">
                 <input
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter GitHub username"
+                    className="p-2 border rounded w-full"
                 />
-                <button type="submit">Search</button>
+                <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Enter location"
+                    className="p-2 border rounded w-full"
+                />
+                <input
+                    type="number"
+                    value={repos}
+                    onChange={(e) => setRepos(e.target.value)}
+                    placeholder="Minimum repositories"
+                    className="p-2 border rounded w-full"
+                />
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                    Search
+                </button>
             </form>
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
-            {userData && (
-                <div>
-                    <img src={userData.avatar_url} alt={`${userData.login}'s avatar`} width={100} />
-                    <h2>{userData.login}</h2>
-                    <p>
-                        <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
-                            Visit GitHub Profile
+            <div className="mt-4 space-y-4">
+                {results.map((user) => (
+                    <div key={user.id} className="p-4 border rounded">
+                        <img
+                            src={user.avatar_url}
+                            alt={`${user.login}'s avatar`}
+                            width={50}
+                            className="rounded-full"
+                        />
+                        <h2 className="text-lg font-bold">{user.login}</h2>
+                        <p>Location: {user.location || "N/A"}</p>
+                        <p>Repositories: {user.public_repos}</p>
+                        <a
+                            href={user.html_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 underline"
+                        >
+                            View Profile
                         </a>
-                    </p>
-                </div>
-            )}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
